@@ -1,14 +1,12 @@
 from collections.abc import MutableMapping
 from collections import OrderedDict
 import re
+from typing import Iterator, TextIO, Union
 
 
 class ParsingError(Exception):
     """An error encountered while parsing a gtf record"""
-
-    # TODO
-    def __str__(self):
-        pass
+    pass
 
 
 class Record:
@@ -27,13 +25,11 @@ class Record:
     score: str
     """see gtf specification"""
     strand: str
-    """see gtf specification"""
+    """see gtf specification. Stored a either '+' or '-'."""
     frame: str
     """see gtf specification"""
-    attributes: 'AttributesDict'
-    """a dictionary containing all the attributes in the attributes string
-    of the GTF record
-    """
+    attributes: "AttributesDict"
+    """a dictionary of the record's attributes field"""
 
     def __init__(self, line: str):
         """Create a Record from a single line of a GTF"""
@@ -46,10 +42,10 @@ class Record:
             self.end = int(fields[4])
             self.score = fields[5]
             self.strand = fields[6]
-            self.frame = int(fields[7])
+            self.frame = fields[7]
             self.attributes = AttributesDict(fields[8])
         except (ValueError, IndexError) as e:
-            raise ParsingError(f"Cannot parse line: '{line}'")
+            raise ParsingError(f"Cannot parse line: '{line.strip()}'")
 
     def __str__(self) -> str:
         """Convert the Record back into a line of GTF"""
@@ -88,10 +84,15 @@ class AttributesDict(MutableMapping):
     >>> print(attr_dict)
     key1 "val1"; key2 "blah"; key3 "val3";
     """
+
     _attribute_re = re.compile(r'^(\w+) "(.+)"$')
 
     def __init__(self, attributes_field: str):
-        """Make an AttributesDict from the 
+        """Make an AttributesDict from the attributes field of a gtf record
+
+        Args:
+            attributes_field: a string containing the attributes column of
+                a single line of a gtf file
         """
         self._attributes = OrderedDict()
         for attribute in attributes_field.rstrip(";").split("; "):
