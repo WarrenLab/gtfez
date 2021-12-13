@@ -1,11 +1,12 @@
-from collections.abc import MutableMapping
-from collections import OrderedDict
 import re
+from collections import OrderedDict
+from collections.abc import MutableMapping
 from typing import Iterator, TextIO, Union
 
 
 class ParsingError(Exception):
     """An error encountered while parsing a gtf record"""
+
     pass
 
 
@@ -44,7 +45,7 @@ class Record:
             self.strand = fields[6]
             self.frame = fields[7]
             self.attributes = AttributesDict(fields[8])
-        except (ValueError, IndexError) as e:
+        except (ValueError, IndexError):
             raise ParsingError(f"Cannot parse line: '{line.strip()}'")
 
     def __str__(self) -> str:

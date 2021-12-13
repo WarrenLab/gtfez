@@ -1,8 +1,7 @@
-import filecmp
 from os.path import dirname, join
-import pytest
 
 import gtfez
+import pytest
 
 
 @pytest.fixture
