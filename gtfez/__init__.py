@@ -119,3 +119,30 @@ class AttributesDict(MutableMapping):
 
     def __str__(self) -> str:
         return " ".join([f'{k} "{v}";' for k, v in self._attributes.items()])
+
+
+def parse(file: TextIO) -> Iterator[Union[str, Record]]:
+    """Parse a GTF file
+
+    Given an input stream of a GTF file, parse each line of the file,
+    yielding a string if the line is a comment or a Record if the line is a
+    regular GTF record.
+
+    Args:
+        file: the input GTF
+
+    Yields:
+        If the line starts with '#', a string containing the entire line,
+        including the '#'. If the line is a GTF record, a Record object.
+
+    Raises:
+        ParsingError: if one of the lines of the file is misformatted
+    """
+    for i, line in enumerate(file):
+        if line.startswith("#"):
+            yield line.strip()
+        else:
+            try:
+                yield Record(line)
+            except ParsingError as e:
+                raise ParsingError(f"Line {i}: {e}")

@@ -125,3 +125,40 @@ def test_print_line(sample_record):
     )
 
 
+def test_read_full_file(
+    sample_gtf_infile, feature_types, correct_protein_coding_gene_ids
+):
+    comment_count = 0
+    protein_coding_gene_ids = set()
+
+    for record in gtfez.parse(sample_gtf_infile):
+        if isinstance(record, str):
+            comment_count += 1
+        else:
+            assert record.seqname == "38"
+            assert record.source == "ensembl"
+            assert record.feature in feature_types
+            assert record.score == "."
+            assert record.attributes["gene_source"] == "ensembl"
+
+            if (
+                record.feature == "gene"
+                and record.attributes["gene_biotype"] == "protein_coding"
+            ):
+                protein_coding_gene_ids.add(record.attributes["gene_id"])
+
+    assert comment_count == 5
+    assert protein_coding_gene_ids == correct_protein_coding_gene_ids
+
+
+def test_write_full_file(sample_gtf_infile, sample_gtf_outfile, tmp_path):
+    with open(tmp_path / "out.gtf", "w") as out_gtf:
+        for record in gtfez.parse(sample_gtf_infile):
+            if isinstance(record, gtfez.Record):
+                record.seqname = str(int(record.seqname) - 1)
+                record.attributes["test_attribute"] = "what"
+            print(record, file=out_gtf)
+
+    with open(tmp_path / "out.gtf", "r") as out_gtf:
+        for line1, line2 in zip(sample_gtf_outfile, out_gtf):
+            assert line1 == line2
