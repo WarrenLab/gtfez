@@ -1,8 +1,16 @@
+"""Add gene names/symbols to a gtf file.
+
+Often, gtf files come with generic IDs in the "gene_id" field (e.g.,
+"ENSCAFG00000052763"), and missing or incomplete human-readable gene names
+or symbols included. This script takes as input a gtf file and a tsv table
+mapping gene IDs to gene names, and outputs a gtf file with the gene names
+added to the attributes dictionaries of the gtf records.
+"""
 import argparse
 import sys
 from typing import Dict, Iterator, TextIO, Union
 
-from . import ParsingError, Record, parse
+from . import Record, parse
 
 
 def table_to_dict(filename: str):
@@ -24,10 +32,8 @@ def table_to_dict(filename: str):
     with open(filename) as file:
         for i, line in enumerate(file):
             fields = line.strip().split("\t")
-            try:
+            if len(fields) == 2 and fields[1] != "":
                 output_dict[fields[0]] = fields[1]
-            except IndexError:
-                raise ParsingError(f"Cannot parse line {i} of table.")
     return output_dict
 
 
@@ -43,26 +49,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "id_to_symbol_table",
         type=table_to_dict,
-        help="tab-separated table mapping IDs to symbols",
+        help="tab-separated table mapping gene IDs to names/symbols",
     )
     parser.add_argument(
-        "-g",
-        "--gene-id-key GENE_ID_KEY",
+        "-i",
+        "--gene-id-key",
         default="gene_id",
         help="key of a GTF attribute that exists in the input file that you want to "
         "use to look up gene symbols, i.e., corresponding to first column of "
         "id_to_symbol_table",
     )
     parser.add_argument(
-        "-s",
-        "--gene-symbol-key GENE_SYMBOL_KEY",
+        "-n",
+        "--gene-name-key",
         default="gene_name",
         help="GTF attribute key that you want to add to the output file, i.e., "
         "corresponding to the second column of id_to_symbol_table",
     )
     parser.add_argument(
         "-o",
-        "--outfile OUTFILE",
+        "--outfile",
         default=sys.stdout,
         type=argparse.FileType("w"),
         help="path to file where output gtf should be written",
@@ -70,12 +76,12 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def add_gene_symbols(
+def add_gene_names(
     gtf_in: Iterator[Union[str, Record]],
-    outfile: TextIO,
     id_to_symbol_table: Dict[str, str],
+    outfile: TextIO = sys.stdout,
     gene_id_key: str = "gene_id",
-    gene_symbol_key: str = "gene_name",
+    gene_name_key: str = "gene_name",
 ):
     for record in gtf_in:
         if isinstance(record, Record):
@@ -83,7 +89,7 @@ def add_gene_symbols(
                 gene_id = record.attributes[gene_id_key]
                 if gene_id in id_to_symbol_table:
                     gene_symbol = id_to_symbol_table[gene_id]
-                    record.attributes[gene_symbol_key] = gene_symbol
+                    record.attributes[gene_name_key] = gene_symbol
 
         print(record, file=outfile)
 
@@ -91,12 +97,12 @@ def add_gene_symbols(
 def main():
     """Main method of script"""
     args = parse_args()
-    add_gene_symbols(
+    add_gene_names(
         args.gtf_in,
-        args.outfile,
         args.id_to_symbol_table,
-        args.gene_id_key,
-        args.gene_symbol_key,
+        outfile=args.outfile,
+        gene_id_key=args.gene_id_key,
+        gene_name_key=args.gene_name_key,
     )
 
 
