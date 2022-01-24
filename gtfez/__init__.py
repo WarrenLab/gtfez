@@ -149,4 +149,4 @@ def parse(file: TextIO) -> Iterator[Union[str, Record]]:
             try:
                 yield Record(line)
             except ParsingError as e:
-                raise ParsingError(f"Line {i}: {e}")
+                raise ParsingError(f"Line {i+1}: {e}")
