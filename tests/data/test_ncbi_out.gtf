@@ -1,0 +1,16 @@
+#gtf-version 2.2
+#!genome-build Dog10K_Boxer_Tasha
+#!genome-build-accession NCBI_Assembly:GCF_000002285.5
+#!annotation-source NCBI Canis lupus familiaris Annotation Release 106
+NC_006583.4	Gnomon	gene	29337	30631	.	+	.	gene_id "LOC100684726"; transcript_id ""; gene "LOC100684726"; gene_name "LOC100684726";
+NC_006583.4	Gnomon	gene	651385	789323	.	+	.	gene_id "LOC119870367"; transcript_id ""; gene "LOC119870367"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	transcript	651385	789323	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	exon	651385	652415	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; exon_number "1"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	exon	695111	695247	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; exon_number "2"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	exon	696316	696387	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; exon_number "3"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	exon	696906	698305	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; exon_number "4"; gene_name "LOC119870367";
+NC_006583.4	Gnomon	exon	788676	789323	.	+	.	gene_id "LOC119870367"; transcript_id "XR_005316961.1"; gene "LOC119870367"; transcript_biotype "lnc_RNA"; exon_number "5"; gene_name "LOC119870367";
+NC_002008.4	RefSeq	gene	14183	15322	.	+	.	gene_id "CYTB"; db_xref "GeneID:804486"; gbkey "Gene"; gene "CYTB"; gene_biotype "protein_coding"; gene_synonym "cytB"; gene_name "MT-CYTB";
+NC_002008.4	RefSeq	transcript	14183	15322	.	+	.	gene_id "CYTB"; transcript_id "MT-CYTB"; db_xref "GeneID:804486"; gbkey "Gene"; gene "CYTB"; gene_synonym "cytB"; gene_name "MT-CYTB"; transcript_biotype "protein_coding";
+NC_002008.4	RefSeq	exon	14183	15322	.	+	.	gene_id "CYTB"; transcript_id "MT-CYTB"; db_xref "GeneID:804486"; gbkey "Gene"; gene "CYTB"; gene_synonym "cytB"; gene_name "MT-CYTB"; transcript_biotype "protein_coding";
+###
