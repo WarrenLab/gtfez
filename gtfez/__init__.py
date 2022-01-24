@@ -86,7 +86,7 @@ class AttributesDict(MutableMapping):
     key1 "val1"; key2 "blah"; key3 "val3";
     """
 
-    _attribute_re = re.compile(r'^(\w+) "(.+)"$')
+    _attribute_re = re.compile(r'^(\w+) "(.*)"$')
 
     def __init__(self, attributes_field: str):
         """Make an AttributesDict from the attributes field of a gtf record
@@ -120,6 +120,9 @@ class AttributesDict(MutableMapping):
 
     def __str__(self) -> str:
         return " ".join([f'{k} "{v}";' for k, v in self._attributes.items()])
+
+    def move_to_beginning(self, key):
+        self._attributes.move_to_end(key, last=False)
 
 
 def parse(file: TextIO) -> Iterator[Union[str, Record]]:
