@@ -86,6 +86,7 @@ class AttributesDict(MutableMapping):
     key1 "val1"; key2 "blah"; key3 "val3";
     """
 
+    _field_seperator_re = re.compile(""";(?=(?:[^'"]|'[^']*'|"[^"]*")*$)""")
     _attribute_re = re.compile(r'^(\w+) "(.*)"$')
 
     def __init__(self, attributes_field: str):
@@ -96,8 +97,8 @@ class AttributesDict(MutableMapping):
                 a single line of a gtf file
         """
         self._attributes = OrderedDict()
-        for attribute in attributes_field.rstrip(";").split("; "):
-            match = self._attribute_re.match(attribute)
+        for attribute in self._field_seperator_re.split(attributes_field.rstrip(";")):
+            match = self._attribute_re.match(attribute.lstrip(" "))
             if match:
                 self._attributes[match.group(1)] = match.group(2)
             else:

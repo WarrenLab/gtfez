@@ -110,6 +110,18 @@ def test_parse_empty_attribute():
     assert gtfez.AttributesDict(attribute_string)["transcript_biotype"] == ""
 
 
+def test_parse_attribute_with_semicolon():
+    attribute_string = (
+        'gene_id "ENSCAFG00000055060"; '
+        'gene_biotype "miRNA"; '
+        'transcript_biotype "blah; blah"; '
+        'exon_id "ENSCAFE00000485336"; '
+        'exon_version "1"; '
+        'comment "this is a comment";'
+    )
+    assert gtfez.AttributesDict(attribute_string)["transcript_biotype"] == "blah; blah"
+
+
 def test_parse_line(sample_record):
     assert sample_record.seqname == "38"
     assert sample_record.source == "ensembl"
