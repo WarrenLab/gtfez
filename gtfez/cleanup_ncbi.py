@@ -16,7 +16,7 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument(
-        "gtf_in", type=lambda x: parse(open(x)), help="input gtf to add gene symbols to"
+        "gtf_in", type=lambda x: parse(open(x)), help="input NCBI-style gtf to clean up"
     )
     return parser.parse_args()
 
