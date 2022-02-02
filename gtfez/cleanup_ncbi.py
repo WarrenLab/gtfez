@@ -104,11 +104,11 @@ def cleanup_ncbi_gtf(gtf_in: Iterator[Union[str, Record]], outfile: IO = sys.std
         if isinstance(record, str):
             print(record, file=outfile)
 
-        elif record.source == "Gnomon":
-            print(fix_record(record), file=outfile)
-
         elif record.source == "RefSeq":
             deal_with_mito_record(record, outfile=outfile)
+
+        else:
+            print(fix_record(record), file=outfile)
 
 
 def main():
